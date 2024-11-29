@@ -7,8 +7,11 @@ import UpdateCustomerService from '@modules/customers/services/UpdateCustomerSer
 
 export default class CustomersController {
   async index(request: Request, response: Response) {
+    const page = parseInt(request.query.page as string) || 1;
+    const limit = parseInt(request.query.limit as string) || 10;
+
     const listCustomers = new ListCustomerService();
-    const customers = await listCustomers.execute();
+    const customers = await listCustomers.execute(page, limit);
 
     response.json(customers);
   }
