@@ -1,6 +1,7 @@
 import AppError from '@shared/errors/AppError';
 import { Product } from '../database/entities/Products';
 import { productsRepositories } from '../database/repositories/ProductsRepositories';
+import RedisCache from '@shared/cache/RedisCache';
 
 interface IUpdateProduct {
   id: string;
@@ -16,6 +17,7 @@ export default class UpdateProductService {
     price,
     quantity,
   }: IUpdateProduct): Promise<Product> {
+    const redisCache = new RedisCache();
 
     const product = await productsRepositories.findById(id);
 
@@ -34,6 +36,8 @@ export default class UpdateProductService {
     product.quantity = quantity;
 
     await productsRepositories.save(product);
+
+    await redisCache.invalidate('api-mysales-PRODUCT_LIST');
 
     return product;
   }

@@ -16,10 +16,12 @@
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
+    "@types/ioredis": "^4.28.10",
     "@types/joi": "^17.2.2",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.9.0",
     "@types/nodemailer": "^6.4.17",
+    "@types/redis": "^4.0.10",
     "@typescript-eslint/eslint-plugin": "^8.15.0",
     "@typescript-eslint/parser": "^8.15.0",
     "cross-env": "^7.0.3",
@@ -43,10 +45,13 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-async-errors": "^3.1.1",
+    "ioredis": "^5.4.1",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.16",
     "pg": "^8.13.1",
+    "rate-limiter-flexible": "^5.0.4",
+    "redis": "^4.7.0",
     "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.20"
   }
