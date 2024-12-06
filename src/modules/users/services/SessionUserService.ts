@@ -1,22 +1,15 @@
 import AppError from '@shared/errors/AppError';
-import User from '../database/entities/Users';
-import { usersRepositories } from '../database/repositories/UsersRepositories';
 import { compare } from 'bcrypt';
 import { Secret, sign } from 'jsonwebtoken';
-
-interface ISessionUser {
-  email: string;
-  password: string;
-}
-
-interface ISessionResponse {
-  user: User;
-  token: string;
-}
+import { ISessionUser } from '../domain/models/ISessionUser';
+import { ISessionResponse } from '../domain/models/ISessionResponse';
+import { IUsersRepository } from '../domain/repositories/IUserRepositories';
 
 export default class SessionUserService {
+  constructor(private readonly usersRepositories: IUsersRepository) { }
+
   async execute({ email, password }: ISessionUser): Promise<ISessionResponse> {
-    const user = await usersRepositories.findByEmail(email);
+    const user = await this.usersRepositories.findByEmail(email);
 
     if (!user) {
       throw new AppError('Incorrect email/password combination.', 401);

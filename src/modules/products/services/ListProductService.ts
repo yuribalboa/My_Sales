@@ -1,17 +1,20 @@
 import RedisCache from '@shared/cache/RedisCache';
-import { Product } from '../database/entities/Products';
-import { productsRepositories } from '../database/repositories/ProductsRepositories';
+import { IProductsRepository } from '../domain/repositories/IProductsRepository';
+import { IProductPaginate } from '../domain/models/IProductPaginate';
+import { SearchParams } from '@modules/users/infra/database/repositories/UsersRepositories';
 
 export default class ListProductService {
-  async execute(): Promise<Product[]> {
+  constructor(private readonly productsRepository: IProductsRepository) {}
+
+  async execute({ page, skip, take }: SearchParams): Promise<IProductPaginate> {
     const redisCache = new RedisCache();
 
-    let products = await redisCache.recover<Product[]>(
+    let products = await redisCache.recover<IProductPaginate>(
       'api-mysales-PRODUCT_LIST',
     );
 
     if (!products) {
-      products = await productsRepositories.find();
+      products = await this.productsRepository.findAll({ page, skip, take });
 
       await redisCache.save(
         'api-mysales-PRODUCT_LIST',

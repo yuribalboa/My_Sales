@@ -1,9 +1,16 @@
-import User from "../database/entities/Users";
-import { usersRepositories } from "../database/repositories/UsersRepositories";
+import { IPaginateUser } from "../domain/models/IPaginateUser";
+import { IUsersRepository } from "../domain/repositories/IUserRepositories";
+import { SearchParams } from "../infra/database/repositories/UsersRepositories";
 
 export default class ListUserService {
-  async execute(): Promise<User[]>{
-    const users = await usersRepositories.find();
+  constructor(private readonly usersRepositories: IUsersRepository) { }
+
+  async execute({
+    page,
+    skip,
+    take,
+  }: SearchParams): Promise<IPaginateUser>{
+    const users = await this.usersRepositories.findAll({ page, skip, take });
     return users;
   }
 }

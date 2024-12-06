@@ -1,21 +1,27 @@
 import AppError from '@shared/errors/AppError';
-import { usersRepositories } from '../database/repositories/UsersRepositories';
-import { userTokensRepositories } from '../database/repositories/UserTokensRepositories';
+import { inject, injectable } from 'tsyringe';
 import { sendEmail } from '@config/email';
-
-interface IForgotPassword {
-  email: string;
-}
+import { IForgotPassword } from '../domain/models/IForgotPassword';
+import { IUsersRepository } from '../domain/repositories/IUserRepositories';
+import { IUserTokensRepository } from '../domain/repositories/IUserTokenRepository';
 
 export default class SendForgotPasswordEmailService {
+  constructor(
+    @inject('UsersRepository')
+    private usersRepositories: IUsersRepository,
+
+    @inject('UserTokensRepository')
+    private userTokensRepositories: IUserTokensRepository,
+  ) {}
+
   async execute({ email }: IForgotPassword): Promise<void> {
-    const user = await usersRepositories.findByEmail(email);
+    const user = await this.usersRepositories.findByEmail(email);
 
     if (!user) {
       throw new AppError('User not found.', 404);
     }
 
-    const token = await userTokensRepositories.generate(user.id);
+    const token = await this.userTokensRepositories.generate(user.id);
 
     sendEmail({
       to: email,

@@ -1,18 +1,15 @@
 import AppError from '@shared/errors/AppError';
-import User from '../database/entities/Users';
-import { usersRepositories } from '../database/repositories/UsersRepositories';
+import User from '../infra/database/entities/Users';
 import path from 'path';
 import uploadConfig from '@config/upload';
 import fs from 'fs';
-
-interface IUpdateUserAvatar {
-  userId: number;
-  avatarFileName: string;
-}
+import { IUpdateUserAvatar } from '../domain/models/IUpdateUserAvatar';
+import { IUsersRepository } from '../domain/repositories/IUserRepositories';
 
 export default class UpdateUserAvatarService {
+  constructor(private readonly usersRepositories: IUsersRepository) { }
   async execute({ userId, avatarFileName }: IUpdateUserAvatar): Promise<User> {
-    const user = await usersRepositories.findById(userId);
+    const user = await this.usersRepositories.findById(userId);
 
     if (!user) {
       throw new AppError('User not found.', 404);
@@ -29,7 +26,7 @@ export default class UpdateUserAvatarService {
 
     user.avatar = avatarFileName;
 
-    await usersRepositories.save(user);
+    await this.usersRepositories.save(user);
 
     return user;
   }

@@ -1,14 +1,13 @@
 import AppError from '@shared/errors/AppError';
-import { Product } from '../database/entities/Products';
-import { productsRepositories } from '../database/repositories/ProductsRepositories';
-
-interface IShowProduct {
-  id: string;
-}
+import { IShowProduct } from '../domain/models/IShowProduct';
+import { IProductsRepository } from '../domain/repositories/IProductsRepository';
+import { IProduct } from '../domain/models/IProduct';
 
 export default class ShowProductService {
-  async execute({ id }: IShowProduct): Promise<Product> {
-    const product = await productsRepositories.findById(id);
+  constructor(private readonly productsRepository: IProductsRepository) {}
+
+  async execute({ id }: IShowProduct): Promise<IProduct> {
+    const product = await this.productsRepository.findById(id);
 
     if (!product) {
       throw new AppError('Product not found', 404);

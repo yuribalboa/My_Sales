@@ -1,18 +1,11 @@
 import AppError from '@shared/errors/AppError';
-import User from '../database/entities/Users';
-import { usersRepositories } from '../database/repositories/UsersRepositories';
-import usersRouter from '../routes/UserRoutes';
+import User from '../infra/database/entities/Users';
 import { compare, hash } from 'bcrypt';
-
-interface IUpdateProfile {
-  user_id: number;
-  name: string;
-  email: string;
-  password?: string;
-  old_password?: string;
-}
+import { IUpdateProfile } from '../domain/models/IUpdateProfile';
+import { IUsersRepository } from '../domain/repositories/IUserRepositories';
 
 export default class UpdateProfileService {
+  constructor(private readonly usersRepositories: IUsersRepository) { }
   async execute({
     user_id,
     name,
@@ -20,14 +13,14 @@ export default class UpdateProfileService {
     password,
     old_password,
   }: IUpdateProfile): Promise<User> {
-    const user = await usersRepositories.findById(user_id);
+    const user = await this.usersRepositories.findById(user_id);
 
     if (!user) {
       throw new AppError('User not found.', 404);
     }
 
     if (email) {
-      const userUpdateEmail = await usersRepositories.findByEmail(email);
+      const userUpdateEmail = await this.usersRepositories.findByEmail(email);
 
       if (userUpdateEmail) {
         throw new AppError('There is already one user with this email.', 409);
@@ -54,7 +47,7 @@ export default class UpdateProfileService {
       user.name = name;
     }
 
-    await usersRepositories.save(user);
+    await this.usersRepositories.save(user);
 
     return user;
   }
