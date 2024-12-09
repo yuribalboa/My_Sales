@@ -5,9 +5,11 @@ import uploadConfig from '@config/upload';
 import fs from 'fs';
 import { IUpdateUserAvatar } from '../domain/models/IUpdateUserAvatar';
 import { IUsersRepository } from '../domain/repositories/IUserRepositories';
+import { injectable, inject } from 'tsyringe';
 
+@injectable()
 export default class UpdateUserAvatarService {
-  constructor(private readonly usersRepositories: IUsersRepository) { }
+  constructor(@inject('UsersRepository') private readonly usersRepositories: IUsersRepository) { }
   async execute({ userId, avatarFileName }: IUpdateUserAvatar): Promise<User> {
     const user = await this.usersRepositories.findById(userId);
 

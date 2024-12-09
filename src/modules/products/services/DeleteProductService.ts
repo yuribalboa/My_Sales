@@ -2,9 +2,11 @@ import AppError from '@shared/errors/AppError';
 import RedisCache from '@shared/cache/RedisCache';
 import { IDeleteProduct } from '../domain/models/IDeleteProduct';
 import { IProductsRepository } from '../domain/repositories/IProductsRepository';
+import { inject, injectable } from 'tsyringe';
 
+@injectable()
 export default class DeleteProductService {
-  constructor(private readonly productsRepository: IProductsRepository) { }
+  constructor(@inject('ProductsRepository') private readonly productsRepository: IProductsRepository) { }
 
   async execute({ id }: IDeleteProduct): Promise<void> {
     const redisCache = new RedisCache();

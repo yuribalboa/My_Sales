@@ -3,9 +3,11 @@ import User from '../infra/database/entities/Users';
 import { compare, hash } from 'bcrypt';
 import { IUpdateProfile } from '../domain/models/IUpdateProfile';
 import { IUsersRepository } from '../domain/repositories/IUserRepositories';
+import { injectable, inject } from 'tsyringe';
 
+@injectable()
 export default class UpdateProfileService {
-  constructor(private readonly usersRepositories: IUsersRepository) { }
+  constructor(@inject('UsersRepository') private readonly usersRepositories: IUsersRepository) { }
   async execute({
     user_id,
     name,

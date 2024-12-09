@@ -4,9 +4,11 @@ import { Secret, sign } from 'jsonwebtoken';
 import { ISessionUser } from '../domain/models/ISessionUser';
 import { ISessionResponse } from '../domain/models/ISessionResponse';
 import { IUsersRepository } from '../domain/repositories/IUserRepositories';
+import { injectable, inject } from 'tsyringe';
 
+@injectable()
 export default class SessionUserService {
-  constructor(private readonly usersRepositories: IUsersRepository) { }
+  constructor(@inject('UsersRepository') private readonly usersRepositories: IUsersRepository) { }
 
   async execute({ email, password }: ISessionUser): Promise<ISessionResponse> {
     const user = await this.usersRepositories.findByEmail(email);

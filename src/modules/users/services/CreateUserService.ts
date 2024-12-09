@@ -3,9 +3,11 @@ import User from '../infra/database/entities/Users';
 import { hash } from 'bcrypt';
 import { ICreateUser } from '../domain/models/ICreateUser';
 import { IUsersRepository } from '../domain/repositories/IUserRepositories';
+import { injectable, inject } from 'tsyringe';
 
+@injectable()
 export default class CreateUserService {
-  constructor(private readonly usersRepositories: IUsersRepository) { }
+  constructor(@inject('UsersRepository') private readonly usersRepositories: IUsersRepository) { }
 
   async execute({ name, email, password }: ICreateUser): Promise<User> {
     const emailExists = await this.usersRepositories.findByEmail(email);

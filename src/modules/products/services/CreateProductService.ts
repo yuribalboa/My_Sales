@@ -3,9 +3,11 @@ import RedisCache from '@shared/cache/RedisCache';
 import { ICreateProduct } from '../domain/models/ICreateProduct';
 import { IProductsRepository } from '../domain/repositories/IProductsRepository';
 import { IProduct } from '../domain/models/IProduct';
+import { inject, injectable } from 'tsyringe';
 
+@injectable()
 export default class CreateProductService {
-  constructor(private readonly productsRepository: IProductsRepository) { }
+  constructor(@inject('ProductsRepository') private readonly productsRepository: IProductsRepository) { }
 
   async execute({ name, price, quantity }: ICreateProduct): Promise<IProduct> {
     const productExists = await this.productsRepository.findByName(name);

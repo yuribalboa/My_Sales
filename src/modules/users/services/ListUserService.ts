@@ -1,9 +1,11 @@
+import { injectable, inject } from "tsyringe";
 import { IPaginateUser } from "../domain/models/IPaginateUser";
 import { IUsersRepository } from "../domain/repositories/IUserRepositories";
 import { SearchParams } from "../infra/database/repositories/UsersRepositories";
 
+@injectable()
 export default class ListUserService {
-  constructor(private readonly usersRepositories: IUsersRepository) { }
+  constructor( @inject('UsersRepository') private readonly usersRepositories: IUsersRepository) { }
 
   async execute({
     page,
