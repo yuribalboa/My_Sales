@@ -51,22 +51,6 @@ Prettier para padronização de estilo.
 
 ---
 
-## 🧪 Testes
-Tecnologia
-Jest: Testes unitários e de integração.
-Comandos
-Executar testes:
-
-bash
-Copiar código
-npm run test
-Cobertura de testes:
-
-bash
-Copiar código
-npm run test:coverage
-
-
 ## 🗂️ Estrutura do Banco de Dados
 
 Exemplo de Relações:
@@ -74,9 +58,3 @@ Exemplo de Relações:
 - Cada ordem pode incluir vários produtos.
 - Vendedores estão associados às ordens que gerenciam.
 
-
-Desenvolvido com ❤️ por [Seu Nome]
-
-Copiar código
-
-Se precisar de mais informações ou ajustes, é só avisar! 😊
